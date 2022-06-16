@@ -1,3 +1,8 @@
+/**** Remaining bug:
+ * Anklicken der checkboxen ändert nicht ihren Status im State.
+ * Daher werden immer die gleichen Todos als erledigt oder offen angezeigt.
+ */
+
 const addTodoBtn = document.querySelector("#add-todo");
 const deleteBtn = document.querySelector("#delete-btn");
 
@@ -97,5 +102,26 @@ filters.addEventListener("change", function (e) {
   // console.log("renderSingleTodo");
   renderTodos();
 });
+
+//const checkbox = document.querySelector("checkbox");
+// console.log("checkbox: " + checkbox);
+// checkbox.addEventListener("click", function () {
+//   const checkboxValue = {
+//     done: true,
+//   };
+
+//   fetch(url + "/" + todoCheckbox.id, {
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(checkboxValue),
+//   })
+//     .then((res) => res.json())
+//     .then((newTodoFromApi) => {
+//       todos.push(newTodoFromApi);
+//       renderTodos();
+//     });
+// });
 
 loadTodos();
