@@ -1,6 +1,5 @@
 const addTodoBtn = document.querySelector("#add-todo");
 const deleteBtn = document.querySelector("#delete-btn");
-const newTodoInput = document.querySelector("#new-todo");
 
 // State
 let todos = [];
@@ -22,17 +21,12 @@ function renderTodos() {
 
   const filteredTodos = todos.filter(checkFilterForTodo);
   filteredTodos.forEach((todo) => renderSingleTodo(todo));
-  //   todos.forEach((todo) => {
-  //     const newLi = document.createElement("li");
-  //     const todoText = document.createTextNode(todo.description);
-  //     newLi.appendChild(todoText);
-  //     todoList.appendChild(newLi);
-  //   });
 }
 
 function checkFilterForTodo(todo) {
   const filter = getCurrentFilter();
 
+  // return true für offene Todos und false für erledigte Todos
   return (
     filter === "all" ||
     (filter === "open" && todo.done === false) ||
@@ -42,23 +36,33 @@ function checkFilterForTodo(todo) {
 
 function renderSingleTodo(todo) {
   const todoList = document.querySelector("#todo-list");
-  const filters = document.querySelector("#filter");
-  filters = addEventListener("change", function (e) {
-    console.log("renderSingleTodo");
-    renderTodo();
-  });
+
+  const li = document.createElement("li");
+
+  const todoCheckbox = document.createElement("input");
+  todoCheckbox.type = "checkbox";
+  todoCheckbox.checked = todo.done;
+  li.appendChild(todoCheckbox);
+
+  const todoTextNode = document.createTextNode(todo.description);
+  li.appendChild(todoTextNode);
+
+  todoList.appendChild(li);
 }
 
 function getCurrentFilter() {
+  // return open für offene Todos und done für erledigte Todos
   return document.querySelector('input[name="filter"]:checked').value;
 }
 
-addTodoBtn.addEventListener("click", () => {
-  const newTodoText = newTodoInput.value;
+addTodoBtn.addEventListener("click", function () {
+  const newTodoInput = document.querySelector("#new-todo");
   const newTodo = {
-    description: newTodoText,
+    description: newTodoInput.value,
     done: false,
   };
+  todos.push(newTodo);
+  newTodoInput.value = "";
 
   fetch(url, {
     method: "POST",
@@ -86,6 +90,12 @@ deleteBtn.addEventListener("click", () => {
       .then(() => {});
   });
   todoList.innerHTML = "";
+});
+
+const filters = document.querySelector("#filter");
+filters.addEventListener("change", function (e) {
+  // console.log("renderSingleTodo");
+  renderTodos();
 });
 
 loadTodos();
